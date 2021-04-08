@@ -17,15 +17,24 @@ class NewsForm(forms.ModelForm):
 
 class SetSubscriptionsForm(forms.ModelForm):
 
-    blogs_authors = forms.ModelMultipleChoiceField(
+    
+
+    blogs_subcribe = forms.ModelMultipleChoiceField(
         queryset = User.objects.all(), 
         widget  = forms.CheckboxSelectMultiple,
         label = 'Авторы постов'
     )
+ #   print(blogs_subcribe)
+    
+#    def __init__(self, *args, **kwargs):
+#        super(SetSubscriptionsForm, self).__init__(*args, **kwargs)
+#        user = User.objects.get(username=kwargs['context']['user'])
+#        self.fields['blogs_subcribe'].queryset = user.blogs_subcribe.all()
+
 
     class Meta:
         model = User
-        fields = ['blogs_authors']
+        fields = ['blogs_subcribe']
 
 
 class UserRegistrationForm(forms.ModelForm):

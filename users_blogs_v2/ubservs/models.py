@@ -3,15 +3,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from ubservs.managers import CustomUserManager
 from django.contrib.auth.models import UserManager
+from django.contrib.auth.base_user import BaseUserManager
+from django.utils.translation import ugettext_lazy as _
+
+
 
 
 class User(AbstractUser):
-    blogs_suscribe = models.ManyToManyField('Blog', blank=True,
+    blogs_subcribe = models.ManyToManyField('Blog', blank=True,
                                    verbose_name='blogs', null=True)
     read_posts = models.ManyToManyField('Post', blank=True,
                                    verbose_name='posts', null=True)
     
-    objects = UserManager()#CustomUserManager()
+    objects = UserManager()
 
     def __unicode__(self):
         return self.username
@@ -45,7 +49,7 @@ class Post(models.Model):
 
 class Blog(models.Model):
     id = models.AutoField(primary_key=True, verbose_name='Blog id')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, 
+    author = models.OneToOneField(User, on_delete=models.CASCADE, 
                                verbose_name='Автор блога')
 #    posts = models.ManyToManyField(Post, blank=True,
 #                                   verbose_name='posts', null=True)

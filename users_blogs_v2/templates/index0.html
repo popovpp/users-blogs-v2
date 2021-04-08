@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Мой блог</title>
+</head>
+<body>
+
+	<h1>USERS-BLOGS-V2</h1>
+		<form method="GET" action="/accounts/login/"> {% csrf_token %}
+		<input type='submit' value='Войти в аккаунт' name='' style='float: left'>
+		</form>
+		<form method="GET" action="/accounts/signup/"> {% csrf_token %}
+		<input type='submit' value='Создать аккаунт' name='' style='float: left'>
+		</form>
+
+</body>
+</html>

@@ -24,7 +24,7 @@ class PostCreate(FormView):
     form_class = PostForm
     model = Post
     template_name = 'post_create.html'
-    success_url = r'/'
+    success_url = r'/post_list/'
     
     def get_context_data(self, **kwargs):
         context = super(PostCreate, self).get_context_data(**kwargs)
@@ -33,6 +33,9 @@ class PostCreate(FormView):
 
     def form_valid(self, form):
         if self.request.method == 'POST':
+            blog, created = Blog.objects.get_or_create(author=self.request.user)
+            if created:
+                blog.save()
             form = PostForm(self.request.POST)
             if form.is_valid():
                 instance = form.save(commit=False)
@@ -50,78 +53,82 @@ class SignUpView(generic.CreateView):
         if self.request.method == 'POST':
             form = UserRegistrationForm(self.request.POST)
             if form.is_valid():
+                
                 instance = form.save(commit=False)
-#                instance = User.objects.create_user(form.cleaned_data['username'], form.cleaned_data['password2'])
-#                instance.username = form.cleaned_data['username']
-                instance.set_password(form.cleaned_data['password2']) #= form.cleaned_data
+                instance.set_password(form.cleaned_data['password2'])
                 instance.save()
         return super(SignUpView, self).form_valid(form)
 
-#class NewsList(FormView):
-#    model = News
-#    template_name = 'news.html'
-#    form_class = NewsForm
-#    success_url = '/news/' 
+class StartView(generic.ListView):
+    template_name = 'index0.html'
+
+    def get_queryset(self):       
+        return []
+
+class NewsList(FormView):
+    model = News
+    template_name = 'news.html'
+    form_class = NewsForm
+    success_url = '/news/' 
     
-#    def get_context_data(self, **kwargs):
-#        context = super(NewsList, self).get_context_data(**kwargs)
-#        context['user'] = self.request.user
-#        context['object_list'] = News.objects.filter(owner=self.request.user)
-#        return context
+    def get_context_data(self, **kwargs):
+        context = super(NewsList, self).get_context_data(**kwargs)
+        context['user'] = self.request.user
+        context['object_list'] = News.objects.filter(owner=self.request.user)
+        return context
 
-#    def form_valid(self, form, **kwargs):
-#        context = super(NewsList, self).get_context_data(**kwargs)
-#        print('In News form_valid')
-#        print(self.render_to_response(context))
-#        print(form.cleaned_data)
-#        print(self.request.POST)
-#        return super(NewsList, self).form_valid(form)
+    def form_valid(self, form, **kwargs):
+        context = super(NewsList, self).get_context_data(**kwargs)
+        print('In News form_valid')
+        print(self.render_to_response(context))
+        print(form.cleaned_data)
+        print(self.request.POST)
+        return super(NewsList, self).form_valid(form)
 
-#    def post_red(request, idPost):
-#        instance = get_object_or_404(News, idPost=idPost)
-#        if request.method == 'POST':
-#            form = NewsForm(request.POST)
-#            if form.is_valid():
-#                instance.notRead = form.instance.notRead
-#                instance.save(force_update=True)
-#        context = {
-#            'object_list': News.objects.filter(owner=request.user),
-#            'form': form
-#        }
-#        return render(request, 'news.html', context)
+    def post_red(request, idPost):
+        instance = get_object_or_404(News, idPost=idPost)
+        if request.method == 'POST':
+            form = NewsForm(request.POST)
+            if form.is_valid():
+                instance.notRead = form.instance.notRead
+                instance.save(force_update=True)
+        context = {
+            'object_list': News.objects.filter(owner=request.user),
+            'form': form
+        }
+        return render(request, 'news.html', context)
 
 
 
-#class ScrView(FormView):
-#    form_class = SubscriptionsForm
-#    model = Subscriptions
-#    template_name = 'Subscriptions.html'
-#    success_url = r'/subscriptions/'
+class ScrView(FormView):
+    form_class = SetSubscriptionsForm
+    model = User
+    template_name = 'Subscriptions.html'
+    success_url = r'/subscriptions/'
     
-#    def get_context_data(self, **kwargs):
-#        context = super(ScrView, self).get_context_data(**kwargs)
-#        context['user'] = self.request.user
-#        context['authorSub_list'] = Subscriptions.objects.filter(owner=self.request.user)
-#        return context
+    def get_context_data(self, **kwargs):
+        context = super(ScrView, self).get_context_data(**kwargs)
+        context['user'] = self.request.user
+        user_subs = User.objects.get(username=self.request.user).blogs_subcribe.all()
+        context['blogs_authors1'] = [x.author.username for x in user_subs]
+        return context
 
-#    def form_valid(self, form):
-#        authorSubs = Subscriptions.objects.filter(owner=self.request.user)
-#        authorSubs_list = [x.authorSub for x in authorSubs]
-#        request_POST = self.request.POST
-#        current_user = self.request.user
-#        clicked_user = list(form.cleaned_data['authorSub'])
-#        if current_user in clicked_user:
-#            clicked_user.remove(current_user)
-#        for ele in clicked_user:
-#            el = Subscriptions.objects.filter(owner=current_user, authorSub=str(ele))
-#            if len(el) != 0:
-#                print(dict(self.request.POST))
-#                if 'unsubscribe' in self.request.POST:
-#                    el.delete()
-#            else:
-#                if 'subscribe' in self.request.POST:
-#                    el = Subscriptions()
-#                    el.owner = current_user
-#                    el.authorSub = ele
-#                    el.save()
-#         return super(ScrView, self).form_valid(form)
+    def form_valid(self, form):
+        user = User.objects.get(username=self.request.user)
+        user_subs = user.blogs_subcribe.all()
+        blogs_authors = [x.author for x in user_subs]
+        current_user = self.request.user
+        clicked_user_list = list(form.cleaned_data['blogs_subcribe'])
+        if current_user in clicked_user_list:
+            clicked_user_list.remove(current_user)
+        for ele in clicked_user_list:
+            if ele in blogs_authors:
+                if 'unsubscribe' in self.request.POST:
+                    b = Blog.objects.get(author=ele)
+                    user.blogs_subcribe.remove(b)
+            elif ele not in blogs_authors:
+                if 'subscribe' in self.request.POST:
+                    b = Blog.objects.get(author=ele)
+                    user.blogs_subcribe.add(b)
+        user.save()
+        return super(ScrView, self).form_valid(form)

@@ -17,7 +17,7 @@
 	<p>Автор поста {{user}}</p>
 	<input type='submit' value='Сохранить пост' name='' style='float: left'>
 	</form>
-	<form method="GET" action="/"> {% csrf_token %}
+	<form method="GET" action="/post_list/"> {% csrf_token %}
 		<input type='submit' value='Вернуться в блог' name=''>
 	</form>
 </body>
