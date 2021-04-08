@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Подписки</title>
+</head>
+<body>
+	<h1>Мои подписки ({{user}})</h1>
+		<form method="POST" action=""> {% csrf_token %}	
+		<p>{{form.as_p}}</p>
+		<p>Подписки</p>	
+		{% for el in authorSub_list%}
+		<li>{{el.authorSub}}</li>
+		{%endfor%}
+		<p></p>
+		<input type='submit' value='Подписаться' name='subscribe' style='float: left'>
+		<input type='submit' value='Отписаться' name='unsubscribe' style='float: left'>		
+		</form>
+		<form method="GET" action="/"> {% csrf_token %}	
+		<input type='submit' value='Вернуться в блог' name=''>
+		</form>
+
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create</title>
+</head>
+<body>
+<!--	{% if messages %}
+	<ul class='messages'>
+		{% for message in messages %}
+		{{message}}
+		{% endfor %}
+	{% endif %}  -->
+	<form method="POST" action=""> {% csrf_token %}
+	<h1>Новый пост</h1>
+<!--	id = {{instance.id}} -->
+	{{form.as_p}}
+	<p>Автор поста {{user}}</p>
+	<input type='submit' value='Сохранить пост' name='' style='float: left'>
+	</form>
+	<form method="GET" action="/"> {% csrf_token %}
+		<input type='submit' value='Вернуться в блог' name=''>
+	</form>
+</body>
+</html>

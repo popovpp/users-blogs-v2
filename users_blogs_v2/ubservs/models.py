@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+from ubservs.managers import CustomUserManager
+from django.contrib.auth.models import UserManager
 
 
 class User(AbstractUser):
@@ -8,6 +10,9 @@ class User(AbstractUser):
                                    verbose_name='blogs', null=True)
     read_posts = models.ManyToManyField('Post', blank=True,
                                    verbose_name='posts', null=True)
+    
+    objects = UserManager()#CustomUserManager()
+
     def __unicode__(self):
         return self.username
 
@@ -42,14 +47,14 @@ class Blog(models.Model):
     id = models.AutoField(primary_key=True, verbose_name='Blog id')
     author = models.ForeignKey(User, on_delete=models.CASCADE, 
                                verbose_name='Автор блога')
-    posts = models.ManyToManyField(Post, blank=True,
-                                   verbose_name='posts', null=True)
+#    posts = models.ManyToManyField(Post, blank=True,
+#                                   verbose_name='posts', null=True)
     
     def __unicode__(self):
-        return self.id
+        return str(self.id)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
     class Meta():
         verbose_name = 'Блог'

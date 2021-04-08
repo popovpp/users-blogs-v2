@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Новости</title>
+</head>
+<body>
+	<h1>Мои новости ({{user}})</h1>
+		<form method="GET" action="/"> {% csrf_token %}		
+		<input type='submit' value='Вернуться в блог' name=''> 
+		</form>
+		{% for el in object_list%}
+		<div>			
+			<p><h3>Пользователь {{el.authorSub}}</h3></p>
+			<p>{{el.postSub.timestamp}}</p>
+			<h4><p>{{el.postSub.title}}</p></h4>
+			<p>{{el.postSub.text}}</p>
+			<form method="POST" action="/newss/{{el.idPost}}/"> {% csrf_token %}
+			{% if el.notRead %}
+    		<input type = 'submit' name = "" value="Отметить как прочтённый">
+    		{% endif %}
+    		{% if not el.notRead %}
+    		<p>Прочтён</p>
+    		{% endif %}
+    		</form>			
+		</div>
+		{% endfor %} 
+
+</body>
+</html>

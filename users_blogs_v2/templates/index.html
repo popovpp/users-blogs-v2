@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Мой блог</title>
+</head>
+<body>
+<!--<h1>Мой блог (всего постов {{num_rec}})</h1> -->
+	<h1>Мой блог ({{user}})</h1>
+		<form method="GET" action="/post_create/"> {% csrf_token %}
+		<input type='submit' value='Добавить пост' name='' style='float: left'>
+		</form>
+		<form method="GET" action="/news/"> {% csrf_token %}
+		<input type='submit' value='Перейти к новостям' name='' style='float: left'>
+		</form>
+		<form method="GET" action="subscriptions/"> {% csrf_token %}
+		<input type='submit' value='Мои подписки' name=''>
+		</form>
+	{% for el in object_list%}
+	<div>
+		<p><h3>{{el.title}}</h3></p>
+		<p>{{el.text}}</p>
+		<p>{{el.timestamp}}</p>
+	<!--	<p><h2> <a href= "{{ el.get_absolute_url }}"> {{el.idCourse}} {{el.nameCourse}} <a/> </h2></p>
+		<p><a href="{{el.urlCourse}}" target='_blank'>{{el.urlCourse}}</a></p>
+		<p>Дата получения информации: {{el.timestamp}}</p>
+		<form method="POST" action="{{ el.get_absolute_url }}/course_delete/"> {% csrf_token %}
+		<input type='submit' value='Удалить курс' name='' style='float: left'>
+		</form>
+		<form method="GET" action="/courses/"> {% csrf_token %}
+		<input type='submit' value='Вернуться к поиску' name=''>
+		</form>  -->
+	</div>
+	{% endfor %}
+<!--	{% if empty_lst %}
+		<form method="GET" action="/courses/"> {% csrf_token %}
+		<input type='submit' value='Вернуться к поиску' name=''>
+		</form>
+	{%endif%}  -->
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Новости</title>
+</head>
+<body>
+<!--<h1>Мой блог (всего постов {{num_rec}})</h1> -->
+	<h1>Мои подписки ({{user}})</h1>
+		<form method="GET" action="/"> {% csrf_token %}		
+		<input type='submit' value='Вернуться в блог' name=''> 
+		</form>
+		{% for el in object_list%}
+		<div>			
+			<p><h3>Пользователь {{el.authorSub}}</h3></p>
+			<p>{{el.postSub.timestamp}}</p>
+			<h4><p>{{el.postSub.title}}</p></h4>
+			<p>{{el.postSub.text}}</p>
+			<p>{{el.idSubscr}}</p>
+			<form method="POST" action="/news/{{el.idSubscr}}/"> {% csrf_token %}
+			{% if el.notRead %}
+    		<input type = 'submit' name = "" value="Отметить как прочтённый">
+    		{% endif %}
+    		{% if not el.notRead %}
+    		<p>Прочтён</p>
+    		{% endif %}
+    		</form>
+			
+		<!--	<p><input type='checkbox' name="" value='True' 
+				{% if not el.notRead %}
+				checked=CHECKED
+				{%endif%}>
+				<label>Прочитан</label> </p>  -->
+			
+		</div>
+		{% endfor %} 
+
+		
+<!--	<form method="GET" action="/post_create/"> {% csrf_token %}
+		<input type='submit' value='Добавить пост' name='' style='float: left'>
+		</form>
+		<form method="GET" action=""> {% csrf_token %}
+		<input type='submit' value='Перейти к ровостям' name='' style='float: left'>
+		</form>
+		<form method="GET" action=""> {% csrf_token %}
+		<input type='submit' value='Мои подписки' name=''>
+		</form> -->
+	
+<!--	{% if empty_lst %}
+		<form method="GET" action="/courses/"> {% csrf_token %}
+		<input type='submit' value='Вернуться к поиску' name=''>
+		</form>
+	{%endif%}  -->
+</body>
+</html>

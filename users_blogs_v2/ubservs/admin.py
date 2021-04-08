@@ -16,7 +16,7 @@ class UserModelAdmin(admin.ModelAdmin):
         return ", ".join([a.author for a in obj.blogs_suscribe.all()])
 
     def show_read_posts(self, obj):
-        return ", ".join([a.id for a in obj.read_posts.all()])
+        return ", ".join([str(a.id) for a in obj.read_posts.all()])
 
 
 class PostModelAdmin(admin.ModelAdmin):
@@ -37,7 +37,7 @@ class BlogModelAdmin(admin.ModelAdmin):
         model = Blog
 
     def show_posts(self, obj):
-        return ", ".join([a.id for a in obj.posts.all()])
+        return ", ".join([str(a.id) for a in obj.posts.all()])
 
 
 admin.site.register(User, UserModelAdmin)
