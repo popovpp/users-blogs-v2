@@ -5,20 +5,20 @@
 </head>
 <body>
 	<h1>Мои новости ({{user}})</h1>
-		<form method="GET" action="/"> {% csrf_token %}		
+		<form method="GET" action="/post_list/"> {% csrf_token %}		
 		<input type='submit' value='Вернуться в блог' name=''> 
 		</form>
 		{% for el in object_list%}
 		<div>			
-			<p><h3>Пользователь {{el.authorSub}}</h3></p>
-			<p>{{el.postSub.timestamp}}</p>
-			<h4><p>{{el.postSub.title}}</p></h4>
-			<p>{{el.postSub.text}}</p>
-			<form method="POST" action="/newss/{{el.idPost}}/"> {% csrf_token %}
-			{% if el.notRead %}
+			<p><h3>Пользователь {{el.author}}</h3></p>
+			<p>{{el.timestamp}}</p>
+			<h4><p>{{el.title}}</p></h4>
+			<p>{{el.text}}</p>
+			<form method="POST" action="/newss/{{el.id}}/"> {% csrf_token %}
+			{% if el.not_read %}
     		<input type = 'submit' name = "" value="Отметить как прочтённый">
     		{% endif %}
-    		{% if not el.notRead %}
+    		{% if not el.not_read %}
     		<p>Прочтён</p>
     		{% endif %}
     		</form>			

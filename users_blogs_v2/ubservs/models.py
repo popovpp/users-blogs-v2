@@ -1,12 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
-from ubservs.managers import CustomUserManager
+#from ubservs.managers import CustomUserManager
 from django.contrib.auth.models import UserManager
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
-
-
 
 
 class User(AbstractUser):
@@ -51,8 +49,6 @@ class Blog(models.Model):
     id = models.AutoField(primary_key=True, verbose_name='Blog id')
     author = models.OneToOneField(User, on_delete=models.CASCADE, 
                                verbose_name='Автор блога')
-#    posts = models.ManyToManyField(Post, blank=True,
-#                                   verbose_name='posts', null=True)
     
     def __unicode__(self):
         return str(self.id)
