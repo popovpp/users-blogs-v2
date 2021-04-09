@@ -1,10 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
-#from ubservs.managers import CustomUserManager
 from django.contrib.auth.models import UserManager
-from django.contrib.auth.base_user import BaseUserManager
-from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import post_save
+from django.core.mail import send_mail
+from users_blogs_v2.celery import app
+from celery import shared_task
+import smtplib
+from threading import Thread
+
+
 
 
 class User(AbstractUser):
@@ -61,3 +66,33 @@ class Blog(models.Model):
         verbose_name_plural = 'Блоги'
         db_table = 'blogs'
         ordering = ['-id']
+
+
+# Функция обработки сигнала post_save, которая вызывается 
+# внутри регистрируемой функции my_callback
+@app.task
+def indef_task():
+    instance = Post.objects.latest('timestamp')
+    users = User.objects.all()
+    for el in users:
+        for ele in el.blogs_subcribe.all():
+            if ele.author == instance.author:
+                print(el.email)
+                if el.email == '':
+                    el.email = 'a@a.com'
+                try:
+                    send_mail('Add a new post in your News', 
+                              'Dear {}, user {} add a new post. See it in the /news/'.
+                               format(el.username, instance.author), 
+                              'from@example.com',  [f'{el.email}'], fail_silently=False)
+                except Exception as e:
+#                except smtplib.SMTPException as e:
+                    print('Letter was not send to user {} by E-mail: {}'.format(el.username, 
+                                                                        el.email), e)
+
+
+def my_callback(sender, **kwargs):
+    indef_task.delay()  
+
+
+post_save.connect(my_callback, sender=Post)

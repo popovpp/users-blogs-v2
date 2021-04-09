@@ -25,7 +25,7 @@ class PostCreate(FormView):
     model = Post
     template_name = 'post_create.html'
     success_url = r'/post_list/'
-    
+
     def get_context_data(self, **kwargs):
         context = super(PostCreate, self).get_context_data(**kwargs)
         context['user'] = self.request.user
