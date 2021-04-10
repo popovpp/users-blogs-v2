@@ -56,6 +56,9 @@ class SignUpView(generic.CreateView):
                 instance = form.save(commit=False)
                 instance.set_password(form.cleaned_data['password2'])
                 instance.save()
+            blog, created = Blog.objects.get_or_create(author=self.request.user)
+            if created:
+                blog.save()
         return super(SignUpView, self).form_valid(form)
 
 

@@ -14,9 +14,9 @@ from threading import Thread
 
 class User(AbstractUser):
     blogs_subcribe = models.ManyToManyField('Blog', blank=True,
-                                   verbose_name='blogs', null=True)
+                                   verbose_name='Подписные блоги', null=True)
     read_posts = models.ManyToManyField('Post', blank=True,
-                                   verbose_name='posts', null=True)
+                                   verbose_name='Прочитанные новосные посты', null=True)
     
     objects = UserManager()
 
@@ -77,16 +77,12 @@ def indef_task():
     for el in users:
         for ele in el.blogs_subcribe.all():
             if ele.author == instance.author:
-                print(el.email)
-                if el.email == '':
-                    el.email = 'a@a.com'
                 try:
                     send_mail('Add a new post in your News', 
                               'Dear {}, user {} add a new post. See it in the /news/'.
                                format(el.username, instance.author), 
                               'from@example.com',  [f'{el.email}'], fail_silently=False)
                 except Exception as e:
-#                except smtplib.SMTPException as e:
                     print('Letter was not send to user {} by E-mail: {}'.format(el.username, 
                                                                         el.email), e)
 
