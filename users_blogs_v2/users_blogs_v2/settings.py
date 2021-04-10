@@ -37,9 +37,11 @@ ACCOUNT_EMAIL_REQUIRED = False
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+#Celery settings for running in a local environment
 #CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 #CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
 
+#Celery settings for running in a docker.
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 

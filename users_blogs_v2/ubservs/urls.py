@@ -11,4 +11,3 @@ urlpatterns = [
     re_path(r'^subscriptions/', views.ScrView.as_view()),
     re_path(r'^$', views.StartView.as_view()),
 ]
-

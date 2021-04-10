@@ -5,11 +5,6 @@ from django.contrib.auth.models import UserManager
 from django.db.models.signals import post_save
 from django.core.mail import send_mail
 from users_blogs_v2.celery import app
-from celery import shared_task
-import smtplib
-from threading import Thread
-
-
 
 
 class User(AbstractUser):
@@ -41,7 +36,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-
 
     class Meta():
         verbose_name = 'Пост'

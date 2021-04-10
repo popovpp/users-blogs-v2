@@ -37,7 +37,6 @@ class BlogModelAdmin(admin.ModelAdmin):
         model = Blog
 
 
-
 admin.site.register(User, UserModelAdmin)
 admin.site.register(Post, PostModelAdmin)
 admin.site.register(Blog, BlogModelAdmin)
